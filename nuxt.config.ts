@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/supabase'
+    // '@nuxtjs/supabase'
   ],
   runtimeConfig: {
     public: {
@@ -22,12 +22,12 @@ export default defineNuxtConfig({
       ]
     }
   },
-  supabase: {
-    redirectOptions: {
-      login: '/',
-      callback: '/',
-      exclude: [],
-    },
-  },
+  // supabase: {
+  //   redirectOptions: {
+  //     login: '/item/2',
+  //     callback: '/item/2',
+  //     exclude: [],
+  //   },
+  // },
   devtools: { enabled: true }
 })

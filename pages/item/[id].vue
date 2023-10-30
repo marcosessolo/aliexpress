@@ -81,8 +81,8 @@ let currentImage = ref(null)
 
 onMounted(() => {
     watchEffect(() => {
-        currectImage.value = 'https://picsum.photos/id/77/800/800'
-        images.value[0] = 'https://picsum.photos/id/77/800/800'
+        currentImage.value = 'https://picsum.photos/id/77/800/800';
+        images.value[0] = 'https://picsum.photos/id/77/800/800';
     })
 })
 
