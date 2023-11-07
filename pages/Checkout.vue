@@ -7,48 +7,48 @@
                         <div class="text-xl font-semibold mb-2">
                             Shipping Address
                         </div>
-                        <div v-if="false">
+                        <div v-if="currentAddress && currentAddress.data">
                             <NuxtLink to="/address" class="flex items-center pb-2 text-blue-500 hover:text-red-400">
-                                <client-only>
+                                
                                     <font-awesome-icon :icon="['fas', 'plus']" class="mr-2" />
                                     Update Address
-                                </client-only>
+                               
                             </NuxtLink>
                             <div class="pt-2 border-t">
                                 <div class="underline pb-1">Delivery Address</div>
                                 <ul class="text-xs">
                                     <li class="flex items-center gap-2">
                                         <div>Contact Name:</div>
-                                        <div class="font-bold">TEST</div>
+                                        <div class="font-bold">{{ currentAddress.data.name }}</div>
                                     </li>
                                     <li class="flex items-center gap-2">
                                         <div>Address:</div>
-                                        <div class="font-bold">TEST</div>
+                                        <div class="font-bold">{{ currentAddress.data.address }}</div>
                                     </li>
                                     <li class="flex items-center gap-2">
                                         <div>Zip Code:</div>
-                                        <div class="font-bold">TEST</div>
+                                        <div class="font-bold">{{ currentAddress.data.zipcode }}</div>
                                     </li>
                                     <li class="flex items-center gap-2">
                                         <div>City:</div>
-                                        <div class="font-bold">TEST</div>
+                                        <div class="font-bold">{{ currentAddress.data.city }}</div>
                                     </li>
                                     <li class="flex items-center gap-2">
                                         <div>Country:</div>
-                                        <div class="font-bold">TEST</div>
+                                        <div class="font-bold">{{ currentAddress.data.country }}</div>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <NuxtLink v-else to="/address" class="flex items-center text-blue-500 hover:text-red-400">
-                            <client-only>
+                            
                                 <font-awesome-icon :icon="['fas', 'plus']" class="mr-2" />
                                 Add New Address
-                            </client-only>
+                            
                         </NuxtLink>
                     </div>
                     <div id="Items" class="bg-white rounded-lg p-4 mt-4">
-                        <div v-for="product in products">
+                        <div v-for="product in userStore.checkout" :key="product.id">
                             <CheckoutItem :product="product" />
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                         <form @submit.prevent="pay()">
                             <div class="border border-gray-500 p-2 rounded-sm" id="card-element" />
                             <p id="card-error" role="alert" class="text-red-700 text-center font-semibold" />
-                            <ClientOnly>
+                            
                                 <button :disabled="isProcessing" type="submit"
                                     class="mt-4 bg-gradient-to-r from-[#FE630C] to-[#FF3200] w-full text-white text-[21px] font-semibold p-1.5 rounded-full"
                                     :class="isProcessing ? 'opacity-70' : 'opacity-100'">
@@ -79,7 +79,7 @@
                                     <font-awesome-icon :icon="['fas', 'gear']" spin v-if="isProcessing" />
                                     <div v-else>Place Order</div>
                                 </button>
-                            </ClientOnly>
+                            
                         </form>
                     </div>
                     <div class="bg-white rounded-lg p-4 mt-4">
@@ -100,6 +100,7 @@ import { useUserStore } from '~/stores/user';
 import { useRoute } from 'nuxt/app';
 import { ref } from 'vue';
 
+const user = useSupabaseUser()
 const route = useRoute();
 const userStore = useUserStore();
 
@@ -111,6 +112,24 @@ let total = ref(0)
 let clientSecret = null
 let currentAddress = ref(null)
 let isProcessing = ref(false)
+
+onBeforeMount(async () => {
+    if (userStore.checkout.length < 1) {
+        return navigateTo('/shoppingcart')
+    }
+    total.value = 0.00
+
+    if (user.value) {
+        currentAddress.value = await useFetch('/api/prisma/get-address-by-user/${user.value.id}')
+        setTimeout(() => userStore.isLoading = false, 200)
+    }
+})
+
+watchEffect(() => {
+    if (route.fullPath == '/checkout' && !user.value) {
+        return navigateTo('/login')
+    }
+})
 
 onMounted(() => {
     isProcessing.value = true
@@ -142,11 +161,6 @@ const showError = (errorMsgText) => {
 
 }
 
-const products = [
-    { id: 1, title: "Title 1", description: "This is a description", url: "https://picsum.photos/id/7/800/800", price: 9998 },
-    { id: 2, title: "Title 2", description: "This is a description", url: "https://picsum.photos/id/71/800/800", price: 9699 },
-
-]
 
 const cards = ref([
     'visa.png',

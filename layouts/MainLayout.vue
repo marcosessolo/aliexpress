@@ -15,13 +15,11 @@
                 <li class="border-r border-r-gray-400 px-3 hover:text-[#FF4646] cursor-pointer">
                     Buyer Protection
                 </li>
-                <ClientOnly>
+                
                     <li class="px-3 hover:text-[#FF4646] cursor-pointer">
                         <font-awesome-icon :icon="['fas', 'file-arrow-down']" class="mr-1" />
                         App
                     </li>
-                </ClientOnly>
-                <ClientOnly>
                     <li @mouseenter="isAccountMenu = true" @mouseleave="isAccountMenu = false"
                         class="relative flex items-center px-2.5 hover:text-[#FF4646] h-full cursor-pointer"
                         :class="isAccountMenu ? 'bg-white border z-40 shadow-[0_15px_100px_40px_rgba(0,0,0,0.3)]' : 'border border-[#FAFAFA]'">
@@ -31,12 +29,12 @@
 
                         <div id="AccountMenu" v-if="isAccountMenu"
                             class="absolute bg-white w-[220px] text-[#333333] z-40 top-[38px] -left-[100px] border-x border-b">
-                            <div v-if="true">
+                            <div v-if="!user">
                                 <div class="text-semibold text-[15px] my-4 px-3">
                                     Welcome to Aliexpress
                                 </div>
                                 <div class="flex items-center gap-1 px-3 mb-3">
-                                    <Nuxt-Link to="/auth"
+                                    <Nuxt-Link to="/login"
                                         class="bg-[#FF4646] text-center w-full text-[16px] rounded-sm text-white font-semibold p-2">
                                         Login-Register
                                     </Nuxt-Link>
@@ -47,13 +45,13 @@
                                 <li @click="navigateTo('/orders')" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200">
                                     My Orders
                                 </li>
-                                <li v-if="true" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200">
+                                <li v-if="user" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200" @click="client.auth.signOut()">
                                     Sign Out
                                 </li>
                             </ul>
                         </div>
                     </li>
-                </ClientOnly>
+                
             </ul>
         </div>
         <div id="MainHeader" class="flex items-center w-full bg-white">
@@ -64,27 +62,28 @@
                 <div class="max-w-[700px] w-full md:block hidden">
                     <div class="relative">
                         <div class="flex items-center border-2 border-[#FF4646] rounder-md w-full ">
-                            <ClientOnly>
+                            
                                 <input class="w-full placeholder-gray-400 text-sm pl-3 focus:outline-none" type="text"
                                     placeholder="kitchen accessories" v-model="searchItem">
                                 <font-awesome-icon :icon="['fas', 'gear']" spin v-if="isSearching" class="mr-2" />
-                            </ClientOnly>
-                            <ClientOnly>
+                            
+                            
                                 <button class="flex items-center h-[100%] p-1.5 px-2 bg-[#FF4646]">
                                     <font-awesome-icon color="#ffffff" :icon="['fas', 'magnifying-glass']" />
                                 </button>
-                            </ClientOnly>
+                            
                         </div>
                         <div class="absolute bg-white max-w-[700px] h-auto w-full">
-                            <div v-if="false" class="p-1">
-                                <NuxtLink to="`/item/1`"
+                            <!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
+                            <div v-if="items && items.data" v-for="item in items.data" :key="item" class="p-1">
+                                <NuxtLink to="`/item/${item.id}`"
                                     class="flex items-center justify-between w-full cursor-pointer hover:bg-gray-100">
                                     <div class="flex items-center">
-                                        <img class="rounded-md" width="40" src="https://picsum.photos/id/82/300/300"
+                                        <img class="rounded-md" width="40" :src="item.url"
                                             alt="picsum">
-                                        <div class="truncate ml-2">TESTING</div>
+                                        <div class="truncate ml-2">{{ item.title }}</div>
                                     </div>
-                                    <div class="truncate">$ 98.99</div>
+                                    <div class="truncate">$ {{ item.price / 100 }}</div>
                                 </NuxtLink>
                             </div>
                         </div>
@@ -95,21 +94,21 @@
                         @mouseleave="isCartHover = false">
                         <span
                             class="absolute flex items-center justify-center -right-[3px] top-0 bg-[#FF4646] h-[17px] text-xs text-white px-0.5 rounded-full">
-                            0
+                            {{ userStore.cart.length }}
                         </span>
-                        <ClientOnly>
+                        
                             <div class="min-w-[40px]">
                                 <font-awesome-icon :color="isCartHover ? '#FF4646' : ''" :icon="['fas', 'cart-shopping']"
                                     size="lg" />
                             </div>
-                        </ClientOnly>
+                        
                     </button>
                 </NuxtLink>
                 <button @click="userStore.isMenuOverlay = true"
                     class="md:hidden block rounded-full p-1.5 -mt-[4px] hover:bg-gray-200">
-                    <client-only>
+                    
                         <font-awesome-icon :icon="['fas', 'bars']" size="xl" />
-                    </client-only>
+                    
                 </button>
             </div>
         </div>
@@ -122,10 +121,32 @@
 
 <script setup>
 import { useUserStore } from '~/stores/user';
+
 const userStore = useUserStore();
+const client = useSupabaseClient()
+const user = useSupabaseUser()
+
 
 let isAccountMenu = ref(false);
 let isCartHover = ref(false);
 let isSearching = ref(true);
 let searchItem = ref('');
+let items = ref(null)
+
+const searchByName = useDebounce(async () => {
+    isSearching.value = true
+    items.value = await useFetch(`/api/prisma/search-by-name/${searchItem.value}`)
+    isSearching.value = false
+}, 100)
+
+watch(() => searchItem.value, async () => {
+    if (!searchItem.value) {
+        setTimeout(() => {
+            items.value = ''
+            isSearching.value = false
+            return
+        }, 500)
+    }
+    searchByName()
+})
 </script>

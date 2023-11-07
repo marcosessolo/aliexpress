@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  plugins: ['~/plugins/fontawesome.js'],
+  plugins: ['~/plugin-font/fontawesome.js'],
   pages: true,
   modules:[
     'nuxt-icon',
@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/tailwindcss',
-    // '@nuxtjs/supabase'
+    '@nuxtjs/supabase'
   ],
   runtimeConfig: {
     public: {
@@ -24,8 +24,8 @@ export default defineNuxtConfig({
   },
   // supabase: {
   //   redirectOptions: {
-  //     login: '/item/2',
-  //     callback: '/item/2',
+  //     login: 'auth',
+  //     callback: 'auth',
   //     exclude: [],
   //   },
   // },

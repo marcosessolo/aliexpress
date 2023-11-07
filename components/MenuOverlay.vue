@@ -4,13 +4,10 @@
             <NuxtLink to="/" @click="userStore.isMenuOverlay = false">
                 <img width="170" src="AliExpress-logo.png" alt="ali logo">
             </NuxtLink>
-            <client-only>
                 <button @click="userStore.isMenuOverlay = false" class="rounded-full p-1 hover:bg-gray-200">
                     <font-awesome-icon :icon="['fas', 'xmark']" />
                 </button>
-            </client-only>
         </div>
-        <client-only>
             <div class="flex items-center justify-between pt-5">
                 <ul class="w-full">
                     <li @click="goTo('orders')"
@@ -49,7 +46,6 @@
                     </li>
                 </ul>
             </div>
-        </client-only>
     </div>
 </template>
 <script setup>
@@ -72,6 +68,6 @@ const signOut = () => {
 
 const signIn = () => {
     userStore.isMenuOverlay = false
-    return navigateTo('/auth')
+    return navigateTo('/login')
 }
 </script>

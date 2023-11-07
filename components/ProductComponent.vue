@@ -16,11 +16,11 @@
                     <span class="bg-[#FD374F] text-white text-[9px] font-semibold px-1.5 rounded-sm">Welcome Deal</span>
                     <span class="bg-[F5F5F5] border text-[#C08562] text-[9px] font-semibold px-1.5 rounded-sm">Top Selling</span>
                 </div>
-                <client-only>
+               
                 <p class="flex items-center px-1 pt-0.5 text-xs text-[#252525]">
                     5,000+ sold  <font-awesome-icon :icon="['fass', 'star']" style="color: #757575;" class="ml-1.5" /> 4.7
                 </p>
-                </client-only>
+                
                 <p class="px-1 pt-0.5 text-xs text-[#252525]">
                     {{ product.title.substring(0,6) }}
                 </p>

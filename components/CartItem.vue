@@ -22,8 +22,7 @@
                 <Client-Only>
                 <button @click="removeFromCart()" class="mx-3 sm:block hidden -mt-0.5 hover:text-red-500">
                     <font-awesome-icon :icon="['fas', 'trash-can']" />
-                </button>
-            </Client-Only>
+                </button>   
             </div>
             <div class="text-xl font-semibold">
                 $ <span class="font-bold">{{ product.price / 100 }}</span>
@@ -41,7 +40,6 @@
                     <font-awesome-icon :icon="['fas', 'trash-can']" />
                 </button>
             </div>
-        </ClientOnly>
         </div>
     </div>
 </template>

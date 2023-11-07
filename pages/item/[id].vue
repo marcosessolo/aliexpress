@@ -6,29 +6,31 @@
                     <img v-if="currentImage" class="rounded-lg object-fit" :src="currentImage">
 
                     <div v-if="images[0] !== ''" class="flex items-center justify-center mt-2">
-                        <div v-for="image in images">
+                        <div v-for="(image, index) in images" :key="index">
                             <img 
                             @mouseover="currentImage = image" 
                             @click="currentImage = image" 
                             width="70" 
                             class="rounded-md object-fit border-[3px] cursor-pointer" 
-                            :class="currentImage === image ? 'border-[#FF5353]' : ''" :src="image" alt="image">
+                            :class="currentImage === image ? 'border-[#FF5353]' : ''" :src="image">
                         </div>
                     </div>
                 </div>
                 <div class="md:w-[60%] bg-white p-3 rounded-lg">
-                    <div v-if="true">
-                        <p class="mb-2">Title</p>
-                        <p class="font-light text-[12px] mb-2">Description Section</p>
+                    <div v-if="product && product.data">
+                        <p class="mb-2">{{ product.data.title }}</p>
+                        <p class="font-light text-[12px] mb-2">{{ product.data.description }}</p>
                     </div>
 
                     <div class="flex items-center pt-1.5">
+                        
                         <span class="h-4 min-w-4 rounded-full p-0.5 bg-[#FFD000] mr-2">
                             <font-awesome-icon :icon="['fass', 'star']" class="-mt-[17px]" />
                         </span>
+                        
                         <p class="text-[#FF5353]">Extra 5% off</p>
                     </div>
-
+                    
                     <div class="flex items-center justify-start my-2">
                         <font-awesome-icon :icon="['fass', 'star']" style="color: #FF5353;"/>
                         <font-awesome-icon :icon="['fass', 'star']" style="color: #FF5353;"/>
@@ -37,7 +39,7 @@
                         <font-awesome-icon :icon="['fass', 'star']" style="color: #FF5353;"/>
                         <span class="text-[13px] font-light ml-2">5 213 Reviews 1,000+ orders </span>
                     </div>
-
+                    
                     <div class="border-b" />
 
                     <div class="flex items-center justify-start gap-2 my-2">
@@ -70,7 +72,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, watchEffect, ref } from 'vue';
+import { computed, onMounted, watchEffect, ref, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import MainLayout from '~/layouts/MainLayout.vue';
 import {useUserStore} from '~/stores/user';
@@ -78,13 +80,21 @@ import {useUserStore} from '~/stores/user';
 const userStore = useUserStore()
 const route = useRoute()
 let currentImage = ref(null)
+let product = ref(null)
 
-onMounted(() => {
-    watchEffect(() => {
-        currentImage.value = 'https://picsum.photos/id/77/800/800';
-        images.value[0] = 'https://picsum.photos/id/77/800/800';
-    })
+onBeforeMount(async () => {
+    product.value = await useFetch(`/api/prisma/get-product-by-id/${route.params.id}`)
 })
+
+
+watchEffect(() => {
+    if (product.value && product.value.data) {
+        currentImage.value = product.value.data.url
+        images.value[0] = product.value.data.url
+        userStore.isLoading = false
+    }
+})
+
 
 const isInCart = computed(() => {
     let res = false 
@@ -97,7 +107,10 @@ const isInCart = computed(() => {
 })
 
 const priceComputed = computed(() => {
-    return '26.40'
+    if (product.value && product.value.data) {
+        return product.value.data.price / 100
+    }
+    return '0.00'
 })
 
 const images = ref([
@@ -110,6 +123,6 @@ const images = ref([
 ])
 
 const addToCart = () => {
-    alert('Added')
+    userStore.cart.push(product.value.data)
 }
 </script>
