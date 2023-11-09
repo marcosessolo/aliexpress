@@ -19,7 +19,7 @@
                     type="submit"
                     class="mt-6 bg-gradient-to-r from-[#FE630C] to-[#FF3200] w-full text-white text-[21px] font-semibold p-1.5 rounded-full">
                         <div v-if="!isWorking">Update Address</div>
-                        <font-awesome-icon :icon="['fas', 'gear']" spin v-else class="mr-2" size="25" />
+                        <font-awesome-icon :icon="['fas', 'gear']" spin v-else class="mr-2" />
                     </button>
                 </form>
             </div>
@@ -27,7 +27,6 @@
     </MainLayout>
 </template>
 <script setup>
-import { faL } from '@fortawesome/free-solid-svg-icons';
 import MainLayout from '~/layouts/MainLayout.vue';
 import { useUserStore } from '~/stores/user';
 

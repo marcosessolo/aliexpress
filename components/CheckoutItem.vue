@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { toRefs, ref } from 'vue';
+import { toRefs } from 'vue';
 
 const props = defineProps(['product'])
 const { product } = toRefs(props)

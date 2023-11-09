@@ -42,7 +42,7 @@
                             </div>
                             <div class="border-b"></div>
                             <ul class="bg-white">
-                                <li @click="navigateTo('/orders')" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200">
+                                <li @click="navigateTo('/shoppingcart')" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200">
                                     My Orders
                                 </li>
                                 <li v-if="user" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200" @click="client.auth.signOut()">
@@ -99,7 +99,7 @@
                         
                             <div class="min-w-[40px]">
                                 <font-awesome-icon :color="isCartHover ? '#FF4646' : ''" :icon="['fas', 'cart-shopping']"
-                                    size="lg" />
+                                    />
                             </div>
                         
                     </button>
@@ -107,7 +107,7 @@
                 <button @click="userStore.isMenuOverlay = true"
                     class="md:hidden block rounded-full p-1.5 -mt-[4px] hover:bg-gray-200">
                     
-                        <font-awesome-icon :icon="['fas', 'bars']" size="xl" />
+                        <font-awesome-icon :icon="['fas', 'bars']" />
                     
                 </button>
             </div>

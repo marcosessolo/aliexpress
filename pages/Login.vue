@@ -28,8 +28,7 @@ const user = useSupabaseUser()
 
 watchEffect(() => {
     if (user.value) {
-        console.log(user)
-        // return navigateTo('/')
+        return navigateTo('/')
     }
 })
 

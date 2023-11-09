@@ -7,7 +7,7 @@
 
                     <div class="text-xl text-center mt-4"> No items yet?</div>
                     <div v-if="!user" class="flex text-center">
-                        <NuxtLink to="auth"
+                        <NuxtLink to="login"
                             class="bg-[#FD374F] w-full text-white text-[21px] font-semibold p-1.5 rounded-full mt-4">
                             Sign In
                         </NuxtLink>
@@ -116,7 +116,7 @@ const goToCheckout = () => {
         return ids.indexOf(item.id) != -1
     })
 
-    res.forEach(item => userStore.checkout.push(roRaw(item)))
+    res.forEach(item => userStore.checkout.push(toRaw(item)))
 
     return navigateTo('/checkout')
 }

@@ -2,32 +2,24 @@
 export default defineNuxtConfig({
   plugins: ['~/plugin-font/fontawesome.js'],
   pages: true,
-  modules:[
-    'nuxt-icon',
-    'nuxt-lodash',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/supabase'
+  modules: [
+      'nuxt-icon',
+      'nuxt-lodash',
+      '@pinia/nuxt',
+      '@pinia-plugin-persistedstate/nuxt',
+      '@nuxtjs/tailwindcss',
+      '@nuxtjs/supabase'
   ],
   runtimeConfig: {
-    public: {
-      stripePk: process.env.STRIPE_PK_KEY
-    }
+      public: {
+        stripePk: process.env.STRIPE_PK_KEY
+      }
   },
   app: {
-    head: {
-      script: [
-        { src: 'https://js.stripe.com/v3/', defer: true },
-      ]
+      head: {
+        script: [
+          { src: 'https://js.stripe.com/v3/', defer: true }
+        ],
+      }
     }
-  },
-  // supabase: {
-  //   redirectOptions: {
-  //     login: 'auth',
-  //     callback: 'auth',
-  //     exclude: [],
-  //   },
-  // },
-  devtools: { enabled: true }
 })
