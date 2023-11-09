@@ -18,7 +18,7 @@
                         </div>
                     </li>
 
-                    <li @click="goTo('shoppingCart')"
+                    <li @click="goTo('shoppingcart')"
                         class="relative flex items-center justify-between py-2.5 border-b px-3 hover:bg-gray-100 cursor-pointer">
                         <div class="flex items-center text-[20px] font-semibold">
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" />

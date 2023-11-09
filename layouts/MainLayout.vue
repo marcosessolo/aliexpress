@@ -42,7 +42,7 @@
                             </div>
                             <div class="border-b"></div>
                             <ul class="bg-white">
-                                <li @click="navigateTo('/shoppingcart')" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200">
+                                <li @click="navigateTo('/orders')" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200">
                                     My Orders
                                 </li>
                                 <li v-if="user" class="text-[13px] py-2 px-4 w-full hover:bg-gray-200" @click="client.auth.signOut()">
