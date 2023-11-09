@@ -2,7 +2,7 @@
     <div id="MenuOverlay" class="fixed z-50 bottom-0 h-full w-full bg-white px-3">
         <div class="flex items-center justify-between py-5">
             <NuxtLink to="/" @click="userStore.isMenuOverlay = false">
-                <img width="170" src="AliExpress-logo.png" alt="ali logo">
+                <img width="170" src="/AliExpress-logo.png" alt="ali logo">
             </NuxtLink>
                 <button @click="userStore.isMenuOverlay = false" class="rounded-full p-1 hover:bg-gray-200">
                     <font-awesome-icon :icon="['fas', 'xmark']" />
