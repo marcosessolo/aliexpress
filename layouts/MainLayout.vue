@@ -126,6 +126,7 @@ const userStore = useUserStore();
 const client = useSupabaseClient()
 const user = useSupabaseUser()
 
+onMounted(() => isSearching.value = false)
 
 let isAccountMenu = ref(false);
 let isCartHover = ref(false);

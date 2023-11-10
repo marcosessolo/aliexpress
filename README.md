@@ -2,6 +2,8 @@
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+"Please ensure all products are selected before proceeding to checkout. For payment testing, use the card '4242 4242 4242 4242' with expiry 12/24 and CVC 123."
+
 ## Setup
 
 Make sure to install the dependencies:

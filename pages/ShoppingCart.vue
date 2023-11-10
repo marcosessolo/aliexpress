@@ -107,6 +107,10 @@ const selectedRadioFunc = (e) => {
 }
 
 const goToCheckout = () => {
+    if (selectedArray.value.length !== userStore.cart.length) {
+        alert('Please select all products before proceeding to checkout.');
+        return;
+    }
     let ids = []
     userStore.checkout = []
 
