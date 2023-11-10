@@ -121,16 +121,17 @@
 
 <script setup>
 import { useUserStore } from '~/stores/user';
+import { onMounted } from 'vue';
 
 const userStore = useUserStore();
 const client = useSupabaseClient()
 const user = useSupabaseUser()
 
-onMounted(() => isSearching.value = false)
+
 
 let isAccountMenu = ref(false);
 let isCartHover = ref(false);
-let isSearching = ref(true);
+let isSearching = ref(false);
 let searchItem = ref('');
 let items = ref(null)
 
